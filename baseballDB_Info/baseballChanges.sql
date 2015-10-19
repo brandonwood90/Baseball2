@@ -7,6 +7,19 @@
 
 
 CREATE TABLE playerPicture(
+/*
+playerPicture table will hold 
+url string to pictures for the players
+in the Master table
+
+Columns: 
+picID = auto_increment number for the primary key
+playerID = foreign key that references the Master table 
+inorder to conncet the pictures to the player
+picture = url string of the picture
+picWidth = string width of the picture
+picHeigth = string height of the picture
+*/
 	picID INT(7) NOT NULL AUTO_INCREMENT,
 	playerID VARCHAR(10) NOT NULL,
 	picture VARCHAR(40) NOT NULL,
@@ -25,6 +38,18 @@ CREATE TABLE playerPicture(
 
 
 CREATE TABLE playerTrivia(
+/*
+This table is will store trivia for the 
+players in the Master table
+
+COLUMNS:
+triviaID = auto_increment number for the primary key
+playerID = foreign key that references the Master table 
+inorder to conncet the trivia to the player
+trivia = string that contians trivia about the a player
+
+*/
+
 	triviaID INT(7) NOT NULL AUTO_INCREMENT,
 	playerID VARCHAR(10) NOT NULL,
 	trivia VARCHAR(40) NOT NULL,
@@ -41,6 +66,18 @@ CREATE TABLE playerTrivia(
 
 
 CREATE TABLE deletePlayer(
+/*
+This table holds players that can 
+be hidden by a user
+
+COLUMNS:
+deletePlayerID = auto_increment number for the primary key
+playerID = foreign key that references the Master table 
+inorder to conncet the player
+deleted = int 0 or 1, 0 = not hidden and 1 = hidden 
+
+*/
+
 	deletePlayerID INT(7) NOT NULL AUTO_INCREMENT,
 	playerID VARCHAR(10) NOT NULL,
 	deleted INT(1) NOT NULL,
@@ -57,6 +94,19 @@ CREATE TABLE deletePlayer(
 
 
 CREATE TABLE deleteTeam(
+/*
+This table holds teams that can 
+be hidden by a user
+
+COLUMNS:
+deleteID = auto_increment number for the primary key
+teamID = foreign key that references the Teams table 
+inorder to connect the team 
+yearID = foreign key that references the SeriesPost
+deleted = int 0 or 1, 0 = not hidden and 1 = hidden 
+
+*/
+
 	deleteTeamID INT(7) NOT NULL AUTO_INCREMENT,
 	teamID VARCHAR(10) NOT NULL,
 	yearID VARCHAR(4) NOT NULL,
@@ -84,6 +134,9 @@ CREATE TABLE deleteTeam(
 DELIMITER //
 CREATE PROCEDURE getNumOfPlayers()
 	BEGIN
+	/* this procedure will get a count of every
+	    row in the Master table
+	*/
 		SELECT COUNT(*) FROM Master;
 	END //
 DELIMITER;
@@ -92,28 +145,25 @@ DELIMITER;
 DELIMITER //
 CREATE PROCEDURE getNumOfTeams()
 	BEGIN
+	/* this procedure will give a count of all of the 
+		teams in the Teams table
+	
+	*/
 		SELECT COUNT(*) FROM Teams GROUP BY name;
 	END //
 DELIMITER;
 
-
+/*Search procedures*/
 DELIMITER //
-CREATE PROCEDURE displayTeams()
+CREATE PROCEDURE searchTeamsByYear(IN displayYear VARCHAR(4))
 	BEGIN
+	/*
+	  this procedure will search for a team by year in the Teams table
+	  and will display the results 
+	*/
 		SELECT Teams.yearID AS 'YEAR', Teams.name AS 'TEAM', CONCAT(Master.nameFirst," ",Master.nameLast)  AS 'Player'
-		FROM Teams INNER JOIN Salaries ON Salaries.teamID = Teams.teamID
-		INNER JOIN Master ON Salaries.playerID = Master.playerID
-		ORDER BY Teams.yearID ASC GROUP BY Teams.name;		
-	END //
-DELIMITER ;
-
-
-DELIMITER //
-CREATE PROCEDURE displayTeamsSelectYear(IN displayYear VARCHAR(4))
-	BEGIN
-		SELECT Teams.yearID AS 'YEAR', Teams.name AS 'TEAM', CONCAT(Master.nameFirst," ",Master.nameLast)  AS 'Player'
-		FROM Teams INNER JOIN Salaries ON Salaries.teamID = Teams.teamID
-		INNER JOIN Master ON Salaries.playerID = Master.playerID
+		FROM Teams INNER JOIN Appearanes ON Teams.teamID = Appearanes.teamID
+		INNER JOIN Master ON Appearanes.playerID = Master.playerID
 		GROUP BY  Teams.name, Teams.yearID ORDER BY Teams.yearID, Teams.name
 		WHERE Teams.yearID LIKE CONCAT('%', displayYear)
 		ORDER BY Teams.yearID ASC, Teams.name ASC, CONCAT(Master.nameFirst," ",Master.nameLast)  ASC;		
@@ -122,11 +172,15 @@ DELIMITER ;
 
 
 DELIMITER //
-CREATE PROCEDURE displayTeamsSelectTeam(IN displayTeam VARCHAR(100))
+CREATE PROCEDURE searchTeamsByTeam(IN displayTeam VARCHAR(100))
 	BEGIN
+	/*
+	  this procedure will search for a team by team name in the Teams table
+	  and will display the results 
+	*/
 		SELECT Teams.yearID AS 'YEAR', Teams.name AS 'TEAM', CONCAT(Master.nameFirst," ",Master.nameLast)  AS 'Player'
-		FROM Teams INNER JOIN Salaries ON Salaries.teamID = Teams.teamID
-		INNER JOIN Master ON Salaries.playerID = Master.playerID
+		FROM Teams INNER JOIN Appearanes ON Teams.teamID = Appearanes.teamID
+		INNER JOIN Master ON Appearanes.playerID = Master.playerID
 		GROUP BY  Teams.name, Teams.yearID ORDER BY Teams.yearID, Teams.name
 		WHERE Teams.name LIKE CONCAT('%', displayTeam,'%')
 		ORDER BY Teams.yearID ASC, Teams.name ASC, CONCAT(Master.nameFirst," ",Master.nameLast)  ASC;		
@@ -135,11 +189,15 @@ DELIMITER ;
 
 
 DELIMITER //
-CREATE PROCEDURE displayTeamsSelectPlayer(IN displayPlayer VARCHAR(100))
+CREATE PROCEDURE searchTeamsByPlayer(IN displayPlayer VARCHAR(100))
 	BEGIN
+	/*
+	  this procedure will search for a team by player in the Teams table
+	  and will display the results 
+	*/
 		SELECT Teams.yearID AS 'YEAR', Teams.name AS 'TEAM', CONCAT(Master.nameFirst," ",Master.nameLast)  AS 'Player'
-		FROM Teams INNER JOIN Salaries ON Salaries.teamID = Teams.teamID
-		INNER JOIN Master ON Salaries.playerID = Master.playerID
+		FROM Teams INNER JOIN Appearanes ON Teams.teamID = Appearanes.teamID
+		INNER JOIN Master ON Appearanes.playerID = Master.playerID
 		GROUP BY  Teams.name, Teams.yearID ORDER BY Teams.yearID, Teams.name
 		WHERE CONCAT(Master.nameFirst," ",Master.nameLast) LIKE CONCAT('%', displayPlayer,'%')
 		ORDER BY Teams.yearID ASC, Teams.name ASC, CONCAT(Master.nameFirst," ",Master.nameLast)  ASC;		
@@ -149,11 +207,16 @@ DELIMITER ;
 
 
 DELIMITER //
-CREATE PROCEDURE displayTeamsSearch(IN Date_JNum VARCHAR(4), IN team_PName VARCHAR(100))
+CREATE PROCEDURE searchTeamsAndPlayer(IN year_ID VARCHAR(4), IN team_PName VARCHAR(100))
 	BEGIN
+	/*
+	  this procedure will search for a team and players by year and  
+	  team or player name in the Teams table
+	  and will display the results 
+	*/
 		SELECT Teams.yearID AS 'YEAR', Teams.name AS 'TEAM', CONCAT(Master.nameFirst," ",Master.nameLast)  AS 'Player'
-		FROM Teams INNER JOIN Salaries ON Salaries.teamID = Teams.teamID
-		INNER JOIN Master ON Salaries.playerID = Master.playerID
+		FROM Teams INNER JOIN Appearanes ON Teams.teamID = Appearanes.teamID
+		INNER JOIN Master ON Appearanes.playerID = Master.playerID
 		GROUP BY  Teams.name, Teams.yearID ORDER BY Teams.yearID, Teams.name
 		WHERE Teams.yearID LIKE CONCAT('%', Date_JNum)
 		AND (Teams.name LIKE CONCAT('%',team_PName,'%') 
@@ -167,6 +230,10 @@ DELIMITER ;
 DELIMITER //
 CREATE PROCEDURE getAllTeams()
 	BEGIN
+	/*
+		this procedure will get and return all
+		team names in the Teams table
+	*/
 		SELECT Teams.name AS 'Team' FROM Teams 
 		GROUP BY Teams.name ORDER BY Teams.name;		
 	END //
@@ -176,6 +243,9 @@ DELIMITER ;
 DELIMITER //
 CREATE PROCEDURE getAllYearsofTeam(IN searchTeam)
 	BEGIN
+	/*
+	
+	*/
 		SELECT Teams.yearID AS 'Year', Teams.teamID AS 'ID' FROM Teams
 		WHERE Teams.name = searchTeam 
 		GROUP BY Teams.yearID ORDER BY Teams.yearID;
