@@ -1,0 +1,19 @@
+@charset "utf-8";
+/* CSS Document */
+ul { list-style:none
+}
+li { font-style:normal;
+     font-family:"Times New Roman", Times, serif;
+	 color:#0F6
+}
+
+p { color:#0000FF;
+    font-style:normal
+	font-family:"Times New Roman", Times, serif;
+}
+div {
+width:25%;
+position:absolute;
+left:250px;
+top:300px;
+}

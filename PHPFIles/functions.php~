@@ -1,0 +1,164 @@
+<?
+
+/*
+batting functions
+
+
+*/
+
+
+
+
+/*
+batting average
+
+The average number of hits by a batter defined by hits divided by at bats (H/AB).
+
+*/
+
+
+function GetBattingAverage( $hits, $atBats)
+{
+	
+	
+$average = $hits/ $atBats;
+
+
+
+return $battingAverage;
+}
+
+
+function SluggingPercent($atBats , $totalBases)
+{
+
+
+
+
+$slugging = $atBats / $totalBases ;
+
+return $slugging;
+
+}
+
+function GetOnBasePercent($playerID)
+{
+	
+	 
+$query =	"select 'AB' from Batting".$payerIDSQL.$playerIDLocal;
+$ballsLocal = 	exec($query);
+	
+	
+$onBasePercentLocal = $getTotalBases($playerID ) + $ballsLocal;
+
+return $onBasePercentLocal;
+}
+
+function GetTotalBases($hits, $secondBase, $thirdBase)
+{
+	
+	
+	
+$totalBases = $hits + $secondBase + $thirdBase;
+
+return $totalBases;
+}
+
+/*
+at bats returns the at bats
+
+*/
+
+
+function GetAtBats()
+{
+
+
+return $atBats;
+
+}
+
+/*
+pitching get ERA,
+average and whip
+
+
+*/
+
+/* GetERA
+
+The average number of earned runs allowed by a pitcher; total number of earned runs allowed multiplied by 9 divided by the number of innings pitched. ((ERx9)/IP)
+
+*/
+
+function GetEra($earnedRuns,$inningsPitched )
+{
+	
+	
+	
+$era = ($earnedRuns 	* 9)/$inningsPitched;
+return $era;
+	
+}
+
+/*
+The total number of hits allowed by the pitcher divided by the total number of opponent at-bats (H/AB)
+
+*/
+
+function GetPitchingAverage($hitsAllowed , $totalOpponents;)
+{
+	
+	
+
+$pitchingAverage = $hitsAllowed / $totalOpponents;
+
+return $pitchingAverage;
+
+}
+
+/*
+The average number of walks and hits by a pitcher, Hits plus walks allowed divided by innings pitched ((H+W)/IP)
+
+*/
+
+function GetWhip($hits, $walks, $inningsPitched )
+{
+	
+	
+	($hits + $walks)/ $inningsPitched;
+	
+return $whip;
+}
+
+/*
+fielding functions
+
+*/
+
+/*
+RF = (Standard Innings per Game x (Putouts + Assists)) / (Innings Played + (Outs (Partial Innings) Played / 3))
+
+*/
+function GetRangeFactor()
+{
+	
+$ramgeFactor = $standInnings * ($putOuts + $assists)	/ ($inningsPlayed + ($outs * $partialInnings)/3);
+	
+	
+	return $rangeFactor;
+}
+
+/*
+Formula: Putouts + assists/putouts + assists + errors 
+*/
+
+function GetFieldingPercent($Putouts,$assists, $errors )
+{
+	$feildingPercent =  $Putouts + $assists/$putouts + $assists + $errors ;
+	
+	return $feildingPercent;
+}
+
+
+?>
