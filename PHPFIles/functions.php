@@ -1,5 +1,73 @@
 <?
 
+abstract class Player_Class {
+
+/*
+batting variables
+
+*/
+
+$hits; 
+$atBats;
+$atBats ; 
+$hits;
+$secondBase;
+$thirdBase;
+$rbi;
+$alksBatting;
+$strikeOutsBatting;
+$caughtStealingBatting;
+$intionalWalksbatting;
+$hitbyPitch;
+$sacrificeBunt;
+$sacrificeFly;
+$totalBases;
+$goundedDouble;
+$goundedOutRatio;
+$numberPitchesFced;
+$planeAperance;
+
+
+/*
+pitching variables
+
+*/
+
+$earnedRuns;
+$inningsPitched;
+$runsAlowed;
+$hitsAllowed ;
+$totalOpponents;
+$hitsAlowed;
+$walksAloud; 
+$homeRunsAllowed;
+$gamesPitched;
+$gamesStarted;
+$gamesSaved;
+$saveOpertunities;
+$battersStruckOut;
+$gamesCompleted;
+$shutOuts;
+$battershit;
+$intWalksPitched;
+
+/*
+fielding variables
+
+*/
+
+
+$standInnings;
+ $putOuts; $assist; 
+ $inningsPlayed; 
+ $outs;
+  $partialInning;
+ $totalChances;
+ $errors;
+ $doublePlay;
+ $stolenBasesAllowed;
+ $stealsCaught;
+
 /*
 batting functions
 
@@ -76,10 +144,13 @@ $totalBases = $hits + $secondBase + $thirdBase;
 return $totalBases;
 }
 
+
+
 /*
-at bats returns the at bats
+pitching knives
 
 */
+
 
 
 
@@ -193,6 +264,6 @@ $feildingPercent = 0;
 }
 return $feildingPercent;
 }
-
+}
 
 ?>
