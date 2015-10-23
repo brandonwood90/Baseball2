@@ -1,6 +1,6 @@
 <?
 
-class Player_Class {
+abstract class Player_Class {
 
 /*
 batting variables
